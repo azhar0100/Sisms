@@ -1,8 +1,12 @@
 package com.example.azhar.sisms;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +63,25 @@ public class CustomAdapter extends CursorAdapter<ConversationViewHolder> {
 }
 
 class ConversationViewHolder extends RecyclerView.ViewHolder {
+    private static class ClickListener implements View.OnClickListener{
+
+
+        private ConversationViewHolder viewHolder;
+        public ClickListener(ConversationViewHolder vH){
+            viewHolder = vH;
+        }
+        @Override
+        public void onClick(View view){
+            Log.i("Clicklistener","THE CLICK LISTENER BITCH");
+            AppCompatActivity activity = (AppCompatActivity) view.getContext();
+            Bundle bundle = new Bundle();
+            bundle.putInt("thread_id",viewHolder.thread_id);
+            Intent intent=new Intent(activity,InboxActivity.class);
+            intent.putExtras(bundle);
+
+            activity.startActivity(intent);
+        }
+    }
 
     /*This one is supposed to be strictly to hold each conversation*/
     public ImageView getImageView() {
@@ -71,7 +94,7 @@ class ConversationViewHolder extends RecyclerView.ViewHolder {
 
     public ConversationViewHolder(View v) {
         super(v);
-        //v.setOnClickListener(new ClickListener(this));
+        v.setOnClickListener(new ClickListener(this));
         // Define click listener for the ViewHolder's View.
         textView = (TextView) v.findViewById(R.id.textView);
         headView = (TextView) v.findViewById(R.id.textView2);
