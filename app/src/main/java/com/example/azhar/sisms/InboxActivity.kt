@@ -9,7 +9,12 @@ import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.telephony.SmsManager
+import android.text.Editable
+import android.text.SpannableStringBuilder
 import android.util.Log
+import android.view.View
+import android.widget.EditText
 
 class InboxActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -17,6 +22,7 @@ class InboxActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>
     lateinit var mRecyclerView: RecyclerView
     var mAdapter: InboxAdapter = InboxAdapter(null)
     var thread_id = -1
+    var address : String? = null
 
     internal val SMS_SUMMARY_PROJECTION = arrayOf(Telephony.Sms.Inbox._ID,
             Telephony.Sms.Inbox.ADDRESS,
@@ -33,7 +39,8 @@ class InboxActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>
         mRecyclerView.layoutManager = LinearLayoutManager(this)
 
         try {
-            this.thread_id = intent.extras!!.getInt("thread_id")
+            thread_id = intent.extras!!.getInt("thread_id")
+            address = intent.extras!!.getString("address")
             Log.i(TAG, "I am here bitch with $this.thread_id")
         } catch (e: NullPointerException) {
             this.thread_id = -1
@@ -68,6 +75,13 @@ class InboxActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor>
         mAdapter.swapCursor(null)
     }
 
+    fun onSendButton(button: View){
+        var text = findViewById<EditText>(R.id.editText).text.toString()
+        findViewById<EditText>(R.id.editText).text = SpannableStringBuilder("")
+        var manager = SmsManager.getDefault()
+        Log.e(TAG,"Yeah I did get the manager boy")
+        manager.sendTextMessage(address,null,text,null,null)
+    }
 
 
 }

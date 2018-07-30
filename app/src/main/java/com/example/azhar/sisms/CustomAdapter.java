@@ -44,6 +44,7 @@ public class CustomAdapter extends CursorAdapter<ConversationViewHolder> {
             viewHolder.getHeadView().setText(mCursor.getString(1));
             //viewHolder.getTextView().setText(mCursor.getString(mCursor.getColumnIndexOrThrow("body")));
             viewHolder.getTextView().setText(mCursor.getString(4));
+            viewHolder.address = mCursor.getString(mCursor.getColumnIndexOrThrow("address"));
 
             //String imageUri = mCursor.getString(mCursor.getColumnIndexOrThrow("imageUri"));
             String imageUri = null;
@@ -76,6 +77,7 @@ class ConversationViewHolder extends RecyclerView.ViewHolder {
             AppCompatActivity activity = (AppCompatActivity) view.getContext();
             Bundle bundle = new Bundle();
             bundle.putInt("thread_id",viewHolder.thread_id);
+            bundle.putString("address",viewHolder.address);
             Intent intent=new Intent(activity,InboxActivity.class);
             intent.putExtras(bundle);
 
@@ -88,6 +90,7 @@ class ConversationViewHolder extends RecyclerView.ViewHolder {
         return imageView;
     }
     public int thread_id;
+    public String address;
     private final ImageView imageView;
     private final TextView textView;
     private final TextView headView;
